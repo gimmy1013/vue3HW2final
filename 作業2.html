@@ -45,7 +45,7 @@
   
           <div class="drinkBUYBOX">
             <div class="BUYheader">
-              Summary
+              購物明細
             </div>
             <div class="BUYcontent">
               <div class="BUYcard">
@@ -117,7 +117,7 @@
               return this.DrinkItem.length;
             },
             totalPrice() {
-        return this.shoppingCartProducts.reduce((total, product) => total + product.price * product.count, 0);
+            return this.shoppingCartProducts.reduce((total, product) => total + product.price * product.count, 0);
             },
                 },
           methods: {
