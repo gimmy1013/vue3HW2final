@@ -23,11 +23,13 @@
                 <div class="drinkname">
                   {{item.name}}
                 </div>
+                冰:
                 <select class="drinkice" name="" id="" v-model="item.selectedIce">
                     <option value="微冰">微冰</option>
                     <option value="少冰">少冰</option>
                     <option value="正常">正常</option>
                 </select>
+                糖:
                 <select class="drinksuger" name="" id="" v-model="item.selectedSugar">
                     <option value="微糖">微糖</option>
                     <option value="少糖">少糖</option>
@@ -174,6 +176,10 @@
 .drinkBUYBOX{
     width: 50%;
 }
+.drinkcardbox{
+  text-align: center;
+  justify-content: center;
+}
 .drinkcard{
   background-color: white;
   justify-content: center;
@@ -227,5 +233,6 @@
 .sumbox{
   font-size: 2rem;
 }
+
 </style>
 </html>
