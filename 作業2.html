@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue作業2</title>
+</head>
+<body>
+    
+    <div id="app">
+        <div class="wrap">
+          <div class="drinkmenuBOX">
+            <div class="drinkHeader">
+              <h2 class="drinkTitle">飲品</h2>
+              <p class="drinkTotal">{{ drinkItemcount}} items</p>
+            </div>
+            <div class="drinkcardbox">
+              <div v-for="(item) in DrinkItem" :key="item.id" class="drinkcard">
+                <div class="drinkpic">
+                  <img :src="item.imgSrc" :alt="item.name" />
+                </div>
+                <div class="drinkname">
+                  {{item.name}}
+                </div>
+                <select class="drinkice" name="" id="" v-model="item.selectedIce">
+                    <option value="微冰">微冰</option>
+                    <option value="少冰">少兵</option>
+                    <option value="正常">正常</option>
+                </select>
+                <select class="drinksuger" name="" id="" v-model="item.selectedSugar">
+                    <option value="微糖">微糖</option>
+                    <option value="少糖">少糖</option>
+                    <option value="正常">正常</option>
+                </select>
+                <div class="drinkcount">
+                  <button class="" @click="updatecountOfProduct(item, 'decrease')"> - </button>
+                  <div class="">{{item.count}}</div>
+                  <button class=""@click="updatecountOfProduct(item, 'increase')"> + </button>
+                </div>
+                <div class="drinkprice">$ {{(item.price)*(item.count)}}</div>
+                <button class="put" @click="addToCart(item)">點餐</button>
+              </div>
+            </div>
+          </div>
+  
+          <div class="drinkBUYBOX">
+            <div class="BUYheader">
+              Summary
+            </div>
+            <div class="BUYcontent">
+              <div class="BUYcard">
+                <div v-for="(item, index) in shoppingCartProducts" :key="index" class="BUYitem">
+                  <div class="drinkname">
+                      {{ item.name }} {{ selectedIce }} {{ selectedSugar }}
+                  </div>
+                  <div class="drinkprice">$ {{ calculatePrice(item.price, item.count) }}</div>
+              </div>
+              </div>
+              <div class="sum box">
+                <div class="sumbox">
+                  <div class="sumtext">總金額</div>
+                  <div class="sumprice">
+                    $ {{ totalPrice }}
+                  </div>
+                </div>
+                <button class="delet" @click="clearCart">清除</button>
+              </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const app = Vue.createApp({
+          data() {
+            return {
+              Drink: [
+                {
+                  id: "1",
+                  imgSrc: "./IMG/紅茶.jpg",
+                  name: "熟成紅茶",
+                  price: 30,
+                  count: 1,
+                },
+                {
+                  id: "2",
+                  imgSrc: "./IMG/波霸奶茶.jpg",
+                  name: "波霸奶茶",
+                  price: 45,
+                  count: 1,
+                },
+                {
+                  id: "3",
+                  imgSrc: "./IMG/綠茶.jpg",
+                  name: "綠茶",
+                  price: 25,
+                  count: 3,
+                },
+                {
+                  id: "4",
+                  imgSrc: "./IMG/高山茶.jpg",
+                  name: "高山茶",
+                  price: 40,
+                  count: 1,
+                },
+              ],
+              shoppingCartProducts: [],
+            };
+          },
+          
+          computed: {
+            DrinkItem() {
+              return [...this.Drink];
+            },
+            drinkItemcount() {
+              return this.DrinkItem.length;
+            },
+            totalPrice() {
+        return this.shoppingCartProducts.reduce((total, product) => total + product.price * product.count, 0);
+            },
+                },
+          methods: {
+            updatecountOfProduct(item, feature) {  
+              if (item.count === 1 && feature === "decrease") return;
+              feature === "increase" ? item.count++ : item.count--;
+            },
+            clearCart() {
+            this.shoppingCartProducts = []; 
+            },
+  
+            calculatePrice(price, count) {
+              return Math.floor(price * count * 10) / 10;
+            },
+            addToCart(item) {
+            const selectedIce = item.selectedIce; 
+            const selectedSugar = item.selectedSugar; 
+
+              const cartItem = {
+              name: `${item.name} ${selectedIce} ${selectedSugar}`,
+              count: item.count,
+              price: item.price,
+              selectedIce: selectedIce, 
+              selectedSugar: selectedSugar, 
+            };
+              this.shoppingCartProducts.push(cartItem);
+              item.count = 1;
+              item.selectedIce = '';
+              item.selectedSugar = '';
+            },
+          },
+        });
+        app.mount("#app");
+      </script>
+</body>
+
+<style>
+.app{
+    width: 100%;
+}
+.wrap{
+    border:1px solid black;
+    display: flex;
+    width: 150vh;
+    margin: auto;
+    background-color: gray;
+}
+.drinkmenuBOX{
+    width: 50%;
+}
+.drinkBUYBOX{
+    width: 50%;
+}
+.drinkcard{
+  background-color: white;
+  justify-content: center;
+  margin: 10px 3px;
+  width: 100%;
+  display: flex;
+}
+.drinkcard div{
+  width: 25%;
+  justify-content: center;
+}
+.drinkpic{
+  width: 100px;
+  height: 100px;
+}
+.drinkpic img{
+  width: 100%;
+}
+.drinkice{
+  width: 60px;
+}
+.drinksuger{
+  width: 60px;
+}
+.drinkname{
+  display: flex;
+  align-items: center;
+}
+.drinkcount{
+  display: flex;
+  margin: auto;
+  text-align: center;
+}
+.drinkprice{
+  display: flex;
+  align-items: center;
+}
+.put{
+  display: flex;
+  align-items: center;
+}
+.BUYcontent{
+  padding-left: 20px;
+}
+.sumbox{
+  font-size: 2rem;
+}
+</style>
+</html>
